@@ -7,7 +7,7 @@ Task resolution process:
 * Resolve the task
 * Commit your solution
 * Push to GitHub
-* create a pull request
+* cte a pull requereast
 
 
 # Task
