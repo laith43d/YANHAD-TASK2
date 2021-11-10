@@ -7,6 +7,7 @@ from pydantic import UUID4
 class MessageOut(Schema):
     detail: str
 
+
 class HumanQualities(Schema):
     age: int
     height: int
@@ -16,15 +17,18 @@ class RuaaSchema(Schema):
     name: str
     specs: HumanQualities
 
+
 class CategoryOut(Schema):
     id: UUID4
     name: str
     description: str
     image: str
 
+
 class LabelOut(Schema):
     id: UUID4
     name: str
+
 
 class MerchantOut(Schema):
     id: UUID4
@@ -32,10 +36,36 @@ class MerchantOut(Schema):
     created: datetime.datetime
     updated: datetime.datetime
 
+
 class VendorOut(Schema):
     id: UUID4
     name: str
     image: str
+
+
+class CreateMerchant(Schema):
+    id: UUID4
+    name: str
+    image: str
+    slug: str
+
+
+class CreateCategory(Schema):
+    id: UUID4
+    name: str
+    description: str
+    image: str
+    is_active: bool
+
+
+class CreateVendor(Schema):
+    id: UUID4
+    name: str
+
+
+class CreateLabel(Schema):
+    id: UUID4
+    name: str
 
 
 class ProductOut(Schema):
@@ -52,6 +82,7 @@ class ProductOut(Schema):
     label: LabelOut
     created: datetime.datetime
     updated: datetime.datetime
+
 
 class ProductCreate(Schema):
     is_featured: bool
