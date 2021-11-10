@@ -18,9 +18,9 @@ from django.urls import path
 from ninja import NinjaAPI
 from commerce.controllers import commerce_controller
 
+# make urls and routes
 api = NinjaAPI()
 api.add_router('', commerce_controller)
-
 urlpatterns = [
     path('api/', api.urls),
     path('admin/', admin.site.urls),

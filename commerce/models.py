@@ -7,6 +7,8 @@ from django.db import models
 User = get_user_model()
 
 
+# Create your models here.
+
 class Entity(models.Model):
     class Meta:
         abstract = True
@@ -19,6 +21,7 @@ class Entity(models.Model):
 class Product(Entity):
     name = models.CharField('name', max_length=255)
     description = models.TextField('description', null=True, blank=True)
+    # description = RichTextField('description', null=True, blank=True)
     weight = models.FloatField('weight', null=True, blank=True)
     width = models.FloatField('width', null=True, blank=True)
     height = models.FloatField('height', null=True, blank=True)
@@ -110,6 +113,10 @@ class OrderStatus(Entity):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name_plural = 'Order Status'
+        verbose_name = 'Order Status'
+
 
 class Category(Entity):
     parent = models.ForeignKey('self', verbose_name='parent', related_name='children',
@@ -161,6 +168,7 @@ class ProductImage(Entity):
             img.save(self.image.path)
             # print(self.image.path)
 
+
 class Label(Entity):
     name = models.CharField('name', max_length=255)
 
@@ -170,6 +178,7 @@ class Label(Entity):
 
     def __str__(self):
         return self.name
+
 
 class Vendor(Entity):
     name = models.CharField('name', max_length=255)
@@ -190,11 +199,17 @@ class Vendor(Entity):
             img.save(self.image.path)
             # print(self.image.path)
 
+
 class City(Entity):
     name = models.CharField('city', max_length=255)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = 'Cities'
+        verbose_name = 'city'
+
 
 class Address(Entity):
     user = models.ForeignKey(User, verbose_name='user', related_name='address',
@@ -202,8 +217,12 @@ class Address(Entity):
     work_address = models.BooleanField('work address', null=True, blank=True)
     address1 = models.CharField('address1', max_length=255)
     address2 = models.CharField('address2', null=True, blank=True, max_length=255)
-    city = models.ForeignKey('City', related_name='addresses', on_delete=models.CASCADE)
+    city = models.ForeignKey(City, related_name='addresses', on_delete=models.CASCADE)
     phone = models.CharField('phone', max_length=255)
 
     def __str__(self):
         return f'{self.user.first_name} - {self.address1} - {self.address2} - {self.phone}'
+
+    class Meta:
+        verbose_name_plural = 'Addresses'
+        verbose_name = 'Address'
