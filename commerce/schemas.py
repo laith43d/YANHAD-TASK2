@@ -65,3 +65,18 @@ class ProductCreate(Schema):
     vendor_id: UUID4
     merchant_id: UUID4
     label_id: UUID4
+        
+class ProductIn(Schema):
+    id: UUID4
+    is_featured: bool
+    name: str
+    description: str
+    qty: int
+    price: int
+    discounted_price: int
+    category_id: UUID4
+    vendor_id: UUID4
+    merchant_id: UUID4
+    label_id: UUID4
+    created: datetime.datetime
+    updated: datetime.datetime

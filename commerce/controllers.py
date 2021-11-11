@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from ninja import Router
 
 from commerce.models import Product
-from commerce.schemas import ProductOut, ProductCreate, MessageOut
+from commerce.schemas import ProductOut, ProductCreate, MessageOut , ProductIn
 
 commerce_controller = Router(tags=['products'])
 
@@ -62,15 +62,26 @@ def create_product(request, payload: ProductCreate):
 
     return 201, product
 
+def update_product(request,id:UUID, payload: ProductIn):
+    try:
+        product = get_object_or_404(Product, id=id)
+        for attr, value in payload.dict().items():
+            setattr(product, attr, value)
+        product.save()
 
-@commerce_controller.put('product/{id}')
-def update_product(request):
-    pass
+    except:
+        return 400, {'detail': 'something wrong happened!'}
+
+    return 204, product
 
 
 @commerce_controller.delete('product/{id}')
-def delete_product(request):
-    pass
+def delete_product(request,id):
+    product = get_object_or_404(Product, id=id)
+    product.delete()
+    return {"success": True}
+
+
 
 # bonus task
 # create all crud operations for Label, Merchant, Vendor, Category
