@@ -65,3 +65,24 @@ class ProductCreate(Schema):
     vendor_id: UUID4
     merchant_id: UUID4
     label_id: UUID4
+
+class LabelCreate(Schema):
+    id: UUID4
+    name: str
+
+class MerchantCreate(Schema):
+    id: UUID4
+    name: str
+    image: str
+    slug: str
+
+class VendorCreate(Schema):
+    id: UUID4
+    name: str
+
+class CategoryCreate(Schema):
+    id: UUID4
+    name: str
+    description: str
+    image: str
+    is_active: bool
