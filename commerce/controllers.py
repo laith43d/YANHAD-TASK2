@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from ninja import Router
 
 from commerce.models import Product
-from commerce.schemas import ProductOut, ProductCreate, MessageOut
+from commerce.schemas import ProductOut, ProductCreate, MessageOut , ProductIn
 
 commerce_controller = Router(tags=['products'])
 
