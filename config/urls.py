@@ -16,12 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ninja import NinjaAPI
-from commerce.controllers import commerce_controller
+from commerce.controllers import commerce_controller, bonus_controller, bonus_create_controller, \
+    bonus_update_controller, bonus_remove_controller
+
+# from
 
 api = NinjaAPI()
 api.add_router('', commerce_controller)
+api.add_router('getters', bonus_controller)
+api.add_router('create', bonus_create_controller)
+api.add_router('update', bonus_update_controller)
+api.add_router('remove', bonus_remove_controller)
+
 
 urlpatterns = [
     path('api/', api.urls),
+
     path('admin/', admin.site.urls),
 ]
