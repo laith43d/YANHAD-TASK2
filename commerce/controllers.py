@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404
 from ninja import Router
 
 from commerce.models import Category, Label, Merchant, Product, Vendor
-from commerce.schemas import CategoryCreate, CategoryOut, LabelCreate, LabelOut, MerchantCreate, MerchantOut, ProductOut, ProductCreate, MessageOut, VendorCreate, VendorOut
+from commerce.schemas import CategoryCreate, CategoryOut, CategoryUpdate, LabelCreate, LabelOut, LabelUpdate, MerchantCreate, MerchantOut, MerchantUpdate, ProductOut, ProductCreate, MessageOut, ProductUpdate, VendorCreate, VendorOut, VendorUpdate
 
-commerce_controller = Router(tags=['products'])
+commerce_controller = {'products': Router(tags=['products']),'label': Router(tags=['label']), 'merchant': Router(tags=['merchant']), 'vendor': Router(
+    tags=['vendor']),'category': Router(tags=['category']), }
 
 # @commerce_controller.get('products')
 # def list_products(request, id: int = None):
@@ -34,7 +35,7 @@ commerce_controller = Router(tags=['products'])
 '''
 
 # all products
-@commerce_controller.get('products', response={
+@commerce_controller['products'].get('products', response={
     200: List[ProductOut],
 })
 def list_products(request):
@@ -43,14 +44,14 @@ def list_products(request):
     return products
 
 # product by id
-@commerce_controller.get('products/{id}', response={
+@commerce_controller['products'].get('products/{id}', response={
     200: ProductOut
 })
 def retrieve_product(request, id):
     return get_object_or_404(Product, id=id)
 
 # add product
-@commerce_controller.post('products', response={
+@commerce_controller['products'].post('products', response={
     201: ProductOut,
     400: MessageOut
 })
@@ -63,16 +64,16 @@ def create_product(request, payload: ProductCreate):
     return 201, product
 
 #update product
-@commerce_controller.put('product/{id}',response={'200': ProductCreate})
-def update_product(request, id, payload: ProductCreate):
-    product = get_object_or_404(Product, id=id)
-    for attr, value in payload.dict().items():
+@commerce_controller['products'].put("product/{id}", response={200: ProductUpdate, 404: MessageOut})
+def update_product(request, product_id, data: ProductUpdate):
+    product = get_object_or_404(Product, id=product_id)
+    for attr, value in data.dict().items():
         setattr(product, attr, value)
-    Product.save()
-    # return {"updated": True}
+    product.save()
+    return product
 
 #delete product
-@commerce_controller.delete('product/{id}')
+@commerce_controller['products'].delete('product/{id}')
 def delete_product(request,id):
     product = get_object_or_404(Product, id=id)
     product.delete()
@@ -83,7 +84,7 @@ def delete_product(request,id):
 # Label's crud operations
 
 # all labels
-@commerce_controller.get('label', response={
+@commerce_controller['label'].get('label', response={
     200: List[LabelOut],
 })
 def list_labels(request):
@@ -91,14 +92,14 @@ def list_labels(request):
     return label
 
 # label by id
-@commerce_controller.get('label/{id}', response={
+@commerce_controller['label'].get('label/{id}', response={
     200: LabelOut
 })
 def retrieve_label(request, id):
     return get_object_or_404(Label, id=id)
 
 # add label
-@commerce_controller.post('label', response={
+@commerce_controller['label'].post('label', response={
     201: LabelOut,
     400: MessageOut
 })
@@ -111,16 +112,17 @@ def create_label(request, payload: LabelCreate):
     return 201, label
 
 #update label
-@commerce_controller.put('label/{id}',response={'200': LabelCreate})
-def update_label(request, id, payload: LabelCreate):
+@commerce_controller['label'].put("label/{id}", response={200: LabelUpdate, 404: MessageOut})
+def update_label(request, id, data: LabelUpdate):
     label = get_object_or_404(Label, id=id)
-    for attr, value in payload.dict().items():
+    for attr, value in data.dict().items():
         setattr(label, attr, value)
-    Label.save()
+    label.save()
+    return label
     # return {"updated": True}
 
-#delete product
-@commerce_controller.delete('label/{id}')
+#delete label
+@commerce_controller['label'].delete('label/{id}')
 def delete_label(request,id):
     label = get_object_or_404(Label, id=id)
     label.delete()
@@ -129,7 +131,7 @@ def delete_label(request,id):
 # Merchant's crud operations
 
 # all Merchants
-@commerce_controller.get('merchant', response={
+@commerce_controller['merchant'].get('merchant', response={
     200: List[MerchantOut],
 })
 def list_merchants(request):
@@ -137,14 +139,14 @@ def list_merchants(request):
     return merchant
 
 # Merchant by id
-@commerce_controller.get('merchant/{id}', response={
+@commerce_controller['merchant'].get('merchant/{id}', response={
     200: MerchantOut
 })
 def retrieve_merchant(request, id):
     return get_object_or_404(Merchant, id=id)
 
 # add Merchant
-@commerce_controller.post('merchant', response={
+@commerce_controller['merchant'].post('merchant', response={
     201: MerchantOut,
     400: MessageOut
 })
@@ -157,16 +159,18 @@ def create_merchant(request, payload: MerchantCreate):
     return 201, merchant
 
 #update Merchant
-@commerce_controller.put('merchant/{id}',response={'200': MerchantCreate})
-def update_merchant(request, id, payload: MerchantCreate):
+
+@commerce_controller['merchant'].put("merchant/{id}", response={200: MerchantUpdate, 404: MessageOut})
+def update_merchant(request, id, data: MerchantUpdate):
     merchant = get_object_or_404(Merchant, id=id)
-    for attr, value in payload.dict().items():
+    for attr, value in data.dict().items():
         setattr(merchant, attr, value)
-    Merchant.save()
-    # return {"updated": True}
+    merchant.save()
+    return merchant
+
 
 #delete Merchant
-@commerce_controller.delete('merchant/{id}')
+@commerce_controller['merchant'].delete('merchant/{id}')
 def delete_merchant(request,id):
     merchant = get_object_or_404(Merchant, id=id)
     merchant.delete()
@@ -175,7 +179,7 @@ def delete_merchant(request,id):
 # Vendor's crud operations
 
 # all vendors
-@commerce_controller.get('vendor', response={
+@commerce_controller['vendor'].get('vendor', response={
     200: List[VendorOut],
 })
 def list_vendor(request):
@@ -183,14 +187,14 @@ def list_vendor(request):
     return vendor
 
 # Vendor by id
-@commerce_controller.get('vendor/{id}', response={
+@commerce_controller['vendor'].get('vendor/{id}', response={
     200: VendorOut
 })
 def retrieve_vendor(request, id):
     return get_object_or_404(Vendor, id=id)
 
 # add Vendor
-@commerce_controller.post('vendor', response={
+@commerce_controller['vendor'].post('vendor', response={
     201: VendorOut,
     400: MessageOut
 })
@@ -203,16 +207,18 @@ def create_vendor(request, payload: VendorCreate):
     return 201, vendor
 
 #update Vendor
-@commerce_controller.put('vendor/{id}',response={'200': VendorCreate})
-def update_vendor(request, id, payload: VendorCreate):
+
+
+@commerce_controller['vendor'].put("vendor/{id}", response={200: VendorUpdate, 404: MessageOut})
+def update_vendor(request, id, data: VendorUpdate):
     vendor = get_object_or_404(Vendor, id=id)
-    for attr, value in payload.dict().items():
+    for attr, value in data.dict().items():
         setattr(vendor, attr, value)
-    Vendor.save()
-    # return {"updated": True}
+    vendor.save()
+    return vendor
 
 #delete Vendor
-@commerce_controller.delete('vendor/{id}')
+@commerce_controller['vendor'].delete('vendor/{id}')
 def delete_vendor(request,id):
     vendor = get_object_or_404(Vendor, id=id)
     vendor.delete()
@@ -221,7 +227,7 @@ def delete_vendor(request,id):
 # Category's crud operations
 
 # all category
-@commerce_controller.get('category', response={
+@commerce_controller['category'].get('category', response={
     200: List[CategoryOut],
 })
 def list_category(request):
@@ -229,14 +235,14 @@ def list_category(request):
     return category
 
 # Category by id
-@commerce_controller.get('category/{id}', response={
+@commerce_controller['category'].get('category/{id}', response={
     200: CategoryOut
 })
 def retrieve_category(request, id):
     return get_object_or_404(Category, id=id)
 
 # add Category
-@commerce_controller.post('category', response={
+@commerce_controller['category'].post('category', response={
     201: CategoryOut,
     400: MessageOut
 })
@@ -249,16 +255,17 @@ def create_category(request, payload: CategoryCreate):
     return 201, category
 
 #update Category
-@commerce_controller.put('category/{id}',response={'200': CategoryCreate})
-def update_category(request, id, payload: CategoryCreate):
+
+@commerce_controller['category'].put("category/{id}", response={200: CategoryUpdate, 404: MessageOut})
+def update_category(request, id, data: CategoryUpdate):
     category = get_object_or_404(Category, id=id)
-    for attr, value in payload.dict().items():
+    for attr, value in data.dict().items():
         setattr(category, attr, value)
-    Category.save()
-    # return {"updated": True}
+    category.save()
+    return category
 
 #delete Category
-@commerce_controller.delete('category/{id}')
+@commerce_controller['category'].delete('category/{id}')
 def delete_category(request,id):
     category = get_object_or_404(Category, id=id)
     category.delete()
