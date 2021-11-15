@@ -19,7 +19,11 @@ from ninja import NinjaAPI
 from commerce.controllers import commerce_controller
 
 api = NinjaAPI()
-api.add_router('', commerce_controller)
+api.add_router('', commerce_controller['products'])
+api.add_router('', commerce_controller['merchant'])
+api.add_router('', commerce_controller['vendor'])
+api.add_router('', commerce_controller['category'])
+api.add_router('', commerce_controller['label'])
 
 urlpatterns = [
     path('api/', api.urls),

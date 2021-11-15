@@ -65,3 +65,47 @@ class ProductCreate(Schema):
     vendor_id: UUID4
     merchant_id: UUID4
     label_id: UUID4
+
+class ProductUpdate(Schema):
+    is_featured: bool
+    name: str
+    description: str
+    qty: int
+    cost: int
+    price: int
+    discounted_price: int
+
+class LabelCreate(Schema):
+    id: UUID4
+    name: str
+class LabelUpdate(Schema):
+    name: str
+
+class MerchantCreate(Schema):
+    id: UUID4
+    name: str
+    image: str
+    slug: str
+
+class MerchantUpdate(Schema):
+    name: str
+
+class VendorCreate(Schema):
+    id: UUID4
+    name: str
+
+class VendorUpdate(Schema):
+    name: str
+
+class CategoryCreate(Schema):
+    id: UUID4
+    name: str
+    description: str
+    image: str
+    is_active: bool
+
+class CategoryUpdate(Schema):
+    name: str
+    description: str
+    image: str
+    is_active: bool
