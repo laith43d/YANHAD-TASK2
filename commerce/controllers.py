@@ -78,5 +78,4 @@ def delete_product(request, id):
     pro.delete()
     return {"success": True}
 
-# bonus task
-# create all crud operations for Label, Merchant, Vendor, Category
+
