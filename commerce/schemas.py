@@ -36,6 +36,7 @@ class VendorOut(Schema):
     id: UUID4
     name: str
     image: str
+    slug: str
 
 
 class ProductOut(Schema):
