@@ -64,13 +64,20 @@ def create_product(request, payload: ProductCreate):
 
 
 @commerce_controller.put('product/{id}')
-def update_product(request):
-    pass
+def update_employee(request, id, payload: ProductCreate):
+    product = get_object_or_404(Product, id=id)
+    for key, value in payload.dict().items():
+        setattr(product, key, value)
+    product.save()
+    return {"success": True}
 
 
 @commerce_controller.delete('product/{id}')
-def delete_product(request):
-    pass
+def delete_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    product.delete()
+
+    return {"success": True}
 
 # bonus task
 # create all crud operations for Label, Merchant, Vendor, Category
