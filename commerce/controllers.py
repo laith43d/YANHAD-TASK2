@@ -1,37 +1,11 @@
 from typing import List
-
 from django.shortcuts import get_object_or_404
 from ninja import Router
-
 from commerce.models import Product
 from commerce.schemas import ProductOut, ProductCreate, MessageOut
 
 commerce_controller = Router(tags=['products'])
 
-# @commerce_controller.get('products')
-# def list_products(request, id: int = None):
-#     return {'name': 'Ruaa  solved the task very late!!!!'}
-#
-#
-# @commerce_controller.get('products/{id}')
-# def retrieve_products(request, id: int):
-#     return {'name': f'Ruaa  solved the task {id} days late '}
-#
-#
-# @commerce_controller.post('products')
-# def create_product(request, product_in: RuaaSchema):
-#     return product_in.dict()
-
-
-'''
-/api/resource/{id}/
-
-/api/resource?id=&name=&age=
-
-{
-    JSON
-}
-'''
 
 
 @commerce_controller.get('products', response={
@@ -63,14 +37,17 @@ def create_product(request, payload: ProductCreate):
     return 201, product
 
 
-@commerce_controller.put('product/{id}')
-def update_product(request):
-    pass
+@commerce_controller.put('product/{id}', response={200: UpdateProduct})
+def update_product(request, id: UUID4, payload: UpdateProduct):
+    product = get_object_or_404(Product, id=id)
+    for attr, value in payload.dict().items():
+        setattr(product, attr, value)
+    product.save()  
 
 
 @commerce_controller.delete('product/{id}')
 def delete_product(request):
-    pass
+    get_object_or_404(Product,id=id)
+    Product.delete()
 
-# bonus task
-# create all crud operations for Label, Merchant, Vendor, Category
+
