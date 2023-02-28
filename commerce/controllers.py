@@ -38,9 +38,7 @@ commerce_controller = Router(tags=['products'])
     200: List[ProductOut],
 })
 def list_products(request):
-    products = Product.objects.all()
-    # products = products.filter(name='tshirt')
-    return products
+    return Product.objects.all()
 
 
 @commerce_controller.get('products/{id}', response={
